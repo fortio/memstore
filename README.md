@@ -1,15 +1,49 @@
 # memstore
 Distributed HA in memory store for Golang
 
-# Config Input
+## Config Input
 (all [dflags](https://github.com/fortio/fortio/tree/master/dflag#fortio-dynamic-flags-was-go-flagz) so can be changed without restart)
 
 - List of DNS names, IPs (in Kubernetes you'd pass just a headless service name)
 - Refresh frequency for DNS to IP
 
-# Communication
+### Prototype
+```
+go run . -config-port 7999
+```
+
+Then go change the `peers` on https://localhost:7999 to see:
+```
+20:26:10 I mstore.go:17> Peer set changed from  to a,b,c,z
+20:26:10 I mstore.go:23> Connecting to added Peer        : "a"
+20:26:10 I mstore.go:23> Connecting to added Peer        : "b"
+20:26:10 I mstore.go:23> Connecting to added Peer        : "c"
+20:26:10 I mstore.go:23> Connecting to added Peer        : "z"
+```
+and
+```
+20:26:31 I mstore.go:17> Peer set changed from a,b,c,z to d,a,b,z
+20:26:31 I mstore.go:20> Disconnecting from removed peer : "c"
+20:26:31 I mstore.go:23> Connecting to added Peer        : "d"
+```
+
+## Communication
 
 Should we
 - use some broadcasting/bus
 - ring
 - tcp or http or grpc
+
+## Embedded or separate
+
+Why not both
+
+## Protocol
+
+- Zookeeper
+- Raft
+- Something wrong but simpler (*)
+
+## Persistence
+
+- Dump to disk (Persistent Volume in k8s) periodically
