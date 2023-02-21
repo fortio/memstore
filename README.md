@@ -2,7 +2,7 @@
 Distributed HA in memory store for Golang
 
 ## Config Input
-(all [dflags](https://github.com/fortio/fortio/tree/master/dflag#fortio-dynamic-flags-was-go-flagz) so can be changed without restart)
+(all [dflags](https://github.com/fortio/dflag#fortio-dynamic-flags) so can be changed without restart)
 
 - List of DNS names, IPs (in Kubernetes you'd pass just a headless service name)
 - Refresh frequency for DNS to IP
@@ -25,6 +25,11 @@ and
 20:26:31 I mstore.go:17> Peer set changed from a,b,c,z to d,a,b,z
 20:26:31 I mstore.go:20> Disconnecting from removed peer : "c"
 20:26:31 I mstore.go:23> Connecting to added Peer        : "d"
+```
+
+or similar
+```
+make test
 ```
 
 ## Communication
