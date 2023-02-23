@@ -6,7 +6,7 @@ require (
 	fortio.org/dflag v1.5.0
 	fortio.org/log v1.2.2
 	fortio.org/scli v1.1.0
-	fortio.org/sets v0.3.0
+	fortio.org/sets v1.0.0
 )
 
 require (
