@@ -39,6 +39,8 @@ Should we
 - ring
 - tcp or http or grpc
 
+Let's use a fully mesh broadcast using point2point h2.
+
 ## Embedded or separate
 
 Why not both
