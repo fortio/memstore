@@ -1,5 +1,7 @@
 // FIFO Queue with fixed capacity.
-// Circular Buffer implementation in Go
+// Circular Buffer implementation in Go with both
+// pub/sub thread safe blocking API and pure FIFO queue with set capacity
+// unsynchronized base.
 package cb
 
 import "sync"
@@ -52,7 +54,7 @@ func (cb *CircularBuffer[T]) Push(item T) bool {
 	if cb.tail == len(cb.buffer) { // variable somehow not faster than len(buffer)
 		cb.tail = 0
 	}
-	//cb.tail = (cb.tail + 1) % cb.capacity // classic but slower
+	// cb.tail = (cb.tail + 1) % cb.capacity // classic but slower
 	cb.size++
 	return true
 }

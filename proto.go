@@ -6,8 +6,8 @@ package main
 
 import (
 	"fortio.org/dflag"
+	"fortio.org/memstore/mstore"
 	"fortio.org/scli"
-	"github.com/fortio/memstore/mstore"
 )
 
 func main() {

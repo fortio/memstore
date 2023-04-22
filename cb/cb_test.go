@@ -4,7 +4,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/fortio/memstore/cb"
+	"fortio.org/memstore/cb"
 )
 
 func TestBoundaryConditions(t *testing.T) {
