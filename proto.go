@@ -6,13 +6,13 @@ package main
 
 import (
 	"fortio.org/dflag"
+	"fortio.org/memstore/mstore"
 	"fortio.org/scli"
-	"github.com/fortio/memstore/mstore"
 )
 
 func main() {
 	dflag.Flag("peers", mstore.Peers)
 	scli.ServerMain()
 	mstore.Start()
-	select {}
+	scli.UntilInterrupted()
 }

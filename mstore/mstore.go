@@ -6,12 +6,10 @@ import (
 	"fortio.org/sets"
 )
 
-var (
-	Peers = dflag.New(
-		sets.Set[string]{},
-		"Peers to connect to (comma separated set)",
-	).WithNotifier(peerChange)
-)
+var Peers = dflag.New(
+	sets.Set[string]{},
+	"Peers to connect to (comma separated set)",
+).WithNotifier(peerChange)
 
 func connect(p string) {
 	log.Infof("Connecting to peer     : %q", p)

@@ -54,3 +54,9 @@ Why not both
 ## Persistence
 
 - Dump to disk (Persistent Volume in k8s) periodically
+
+## CircularBuffer
+
+Both pub/sub thread safe blocking version and pure FIFO queue with set capacity versions:
+
+See [cb/cb.go](cb/cb.go)
