@@ -6,6 +6,17 @@ package cb
 
 import "sync"
 
+type Queue[T any] interface {
+	Empty() bool
+	Full() bool
+	Size() int
+	Capacity() int
+	Push(item T) bool
+	Pop() (value T, ok bool)
+	PushBlocking(item T)
+	PopBlocking() (value T)
+}
+
 type CircularBuffer[T any] struct {
 	buffer []T
 	head   int
@@ -16,7 +27,7 @@ type CircularBuffer[T any] struct {
 	empty  *sync.Cond
 }
 
-func New[T any](capacity int) *CircularBuffer[T] {
+func New[T any](capacity int) Queue[T] {
 	cb := &CircularBuffer[T]{
 		buffer: make([]T, capacity),
 		head:   0,

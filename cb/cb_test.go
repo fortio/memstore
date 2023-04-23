@@ -7,10 +7,24 @@ import (
 	"fortio.org/memstore/cb"
 )
 
-func TestBoundaryConditions(t *testing.T) {
-	const capacity = 5
-	buffer := cb.New[int](capacity)
+const capacity = 5
 
+func TestBoundaryConditions(t *testing.T) {
+	testCases := []struct {
+		name string
+		cb   cb.Queue[int]
+	}{
+		{name: "CircBuffer", cb: cb.New[int](capacity)},
+		{name: "Channel", cb: cb.NewC[int](capacity)},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(tt *testing.T) {
+			testBoundaryConditions(tt, tc.cb)
+		})
+	}
+}
+
+func testBoundaryConditions(t *testing.T, buffer cb.Queue[int]) {
 	// Test empty buffer
 	if !buffer.Empty() {
 		t.Error("Buffer should be empty")
@@ -91,7 +105,22 @@ func TestBoundaryConditions(t *testing.T) {
 }
 
 func BenchmarkCircularBuffer(b *testing.B) {
-	c := cb.New[int](100)
+	capacity := 100
+	testCases := []struct {
+		name string
+		cb   cb.Queue[int]
+	}{
+		{name: "CircBuffer", cb: cb.New[int](capacity)},
+		{name: "Channel", cb: cb.NewC[int](capacity)},
+	}
+	for _, tc := range testCases {
+		b.Run(tc.name, func(bb *testing.B) {
+			benchmarkCircularBuffer(bb, tc.cb)
+		})
+	}
+}
+
+func benchmarkCircularBuffer(b *testing.B, c cb.Queue[int]) {
 	var x int
 	var ok bool
 	for i := 0; i < b.N; i++ {
@@ -105,8 +134,20 @@ func BenchmarkCircularBuffer(b *testing.B) {
 }
 
 func TestProducerConsumerScenario(t *testing.T) {
-	buffer := cb.New[int](10)
-
+	testCases := []struct {
+		name string
+		cb   cb.Queue[int]
+	}{
+		{name: "CircBuffer", cb: cb.New[int](10)},
+		{name: "Channel", cb: cb.NewC[int](10)},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(tt *testing.T) {
+			testProducerConsumerScenario(tt, tc.cb)
+		})
+	}
+}
+func testProducerConsumerScenario(t *testing.T, buffer cb.Queue[int]) {
 	var wg sync.WaitGroup
 	wg.Add(11) // 10 producers + 1 consumer
 
@@ -143,7 +184,21 @@ func TestProducerConsumerScenario(t *testing.T) {
 }
 
 func BenchmarkCircularBufferBlocking(b *testing.B) {
-	c := cb.New[int](100)
+	capacity := 100
+	testCases := []struct {
+		name string
+		cb   cb.Queue[int]
+	}{
+		{name: "CircBuffer", cb: cb.New[int](capacity)},
+		{name: "Channel", cb: cb.NewC[int](capacity)},
+	}
+	for _, tc := range testCases {
+		b.Run(tc.name, func(bb *testing.B) {
+			benchmarkCircularBufferBlocking(bb, tc.cb)
+		})
+	}
+}
+func benchmarkCircularBufferBlocking(b *testing.B, c cb.Queue[int]) {
 	var x int
 	for i := 0; i < b.N; i++ {
 		c.PushBlocking(i)
@@ -155,9 +210,7 @@ func BenchmarkCircularBufferBlocking(b *testing.B) {
 	b.Logf("x=%d", x)
 }
 
-func benchmarkPushBlocking(b *testing.B, numProducers, numConsumers int) {
-	buffer := cb.New[int](20) // small queue, higher contention
-
+func benchmarkPushBlocking(b *testing.B, buffer cb.Queue[int], numProducers, numConsumers int) {
 	var wg sync.WaitGroup
 	wg.Add(numProducers + numConsumers)
 	prodN := b.N * numConsumers
@@ -191,11 +244,20 @@ func benchmarkPushBlocking(b *testing.B, numProducers, numConsumers int) {
 	wg.Wait()
 }
 
-func BenchmarkPushBlocking(b *testing.B) {
+func BenchmarkHighContention(b *testing.B) {
 	numProducers := 13
 	numConsumers := 7
 
-	b.Run("BenchmarkPushBlocking 7,5", func(b *testing.B) {
-		benchmarkPushBlocking(b, numProducers, numConsumers)
-	})
+	testCases := []struct {
+		name string
+		cb   cb.Queue[int]
+	}{
+		{name: "CircBuffer", cb: cb.New[int](capacity)},
+		{name: "Channel", cb: cb.NewC[int](capacity)},
+	}
+	for _, tc := range testCases {
+		b.Run(tc.name, func(bb *testing.B) {
+			benchmarkPushBlocking(bb, tc.cb, numProducers, numConsumers)
+		})
+	}
 }
