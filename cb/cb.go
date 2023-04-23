@@ -30,7 +30,7 @@ type CircularBuffer[T any] struct {
 	empty  sync.Cond
 }
 
-// NewC returns the fixed array version of 0 alloc fixed capacity (optionally blocking) [Queue].
+// New returns the fixed array version of 0 alloc fixed capacity (optionally blocking) [Queue].
 func New[T any](capacity int) *CircularBuffer[T] {
 	cb := &CircularBuffer[T]{
 		buffer: make([]T, capacity),
