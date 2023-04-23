@@ -26,8 +26,8 @@ type CircularBuffer[T any] struct {
 	tail   int
 	size   int
 	mu     sync.Mutex
-	full   *sync.Cond
-	empty  *sync.Cond
+	full   sync.Cond
+	empty  sync.Cond
 }
 
 // NewC returns the fixed array version of 0 alloc fixed capacity (optionally blocking) [Queue].
@@ -38,8 +38,8 @@ func New[T any](capacity int) *CircularBuffer[T] {
 		tail:   0,
 		size:   0,
 	}
-	cb.full = sync.NewCond(&cb.mu)
-	cb.empty = sync.NewCond(&cb.mu)
+	cb.full.L = &cb.mu
+	cb.empty.L = &cb.mu
 	return cb
 }
 
