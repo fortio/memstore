@@ -16,6 +16,7 @@ func TestBoundaryConditions(t *testing.T) {
 	}{
 		{name: "CircBuffer", cb: cb.New[int](capacity)},
 		{name: "Channel", cb: cb.NewC[int](capacity)},
+		{name: "CBBroadcast", cb: cb.NewB[int](capacity)},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(tt *testing.T) {
@@ -112,6 +113,7 @@ func BenchmarkCircularBuffer(b *testing.B) {
 	}{
 		{name: "CircBuffer", cb: cb.New[int](capacity)},
 		{name: "Channel", cb: cb.NewC[int](capacity)},
+		{name: "CBBroadcast", cb: cb.NewB[int](capacity)},
 	}
 	for _, tc := range testCases {
 		b.Run(tc.name, func(bb *testing.B) {
@@ -140,6 +142,7 @@ func TestProducerConsumerScenario(t *testing.T) {
 	}{
 		{name: "CircBuffer", cb: cb.New[int](10)},
 		{name: "Channel", cb: cb.NewC[int](10)},
+		{name: "CBBroadcast", cb: cb.NewB[int](10)},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(tt *testing.T) {
@@ -191,6 +194,7 @@ func BenchmarkCircularBufferBlocking(b *testing.B) {
 	}{
 		{name: "CircBuffer", cb: cb.New[int](capacity)},
 		{name: "Channel", cb: cb.NewC[int](capacity)},
+		{name: "CBBroadcast", cb: cb.NewB[int](capacity)},
 	}
 	for _, tc := range testCases {
 		b.Run(tc.name, func(bb *testing.B) {
@@ -253,6 +257,7 @@ func BenchmarkHighContention(b *testing.B) {
 		cb   cb.Queue[int]
 	}{
 		{name: "CircBuffer", cb: cb.New[int](capacity)},
+		{name: "CBBroadcast", cb: cb.NewB[int](capacity)},
 		{name: "Channel", cb: cb.NewC[int](capacity)},
 	}
 	for _, tc := range testCases {
