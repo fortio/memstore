@@ -1,15 +1,14 @@
-// FIFO Queue with fixed capacity.
-// Circular Buffer implementation in Go with both
-// pub/sub thread safe blocking API and pure FIFO queue with set capacity
-// unsynchronized base.
-// Channel / go idiomatic version.
 package cb
 
+// FIFO [Queue] with fixed capacity.
+// Channel / go idiomatic version (blocking, multi thread safe),
+// use [CircularBufferChan] for low/no contention cases as it is faster.
 type CircularBufferChan[T any] struct {
 	buffer chan T
 }
 
-func NewC[T any](capacity int) Queue[T] {
+// NewC returns a channel ([CircularBufferChan]) version of 0 alloc pub/sub fixed capacity blocking queue.
+func NewC[T any](capacity int) *CircularBufferChan[T] {
 	cb := &CircularBufferChan[T]{
 		buffer: make(chan T, capacity),
 	}

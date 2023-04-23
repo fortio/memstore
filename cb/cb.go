@@ -1,7 +1,9 @@
-// FIFO Queue with fixed capacity.
+// First In First Out (FIFO) [Queue] with fixed capacity.
 // Circular Buffer implementation in Go with both
 // pub/sub thread safe blocking API and pure FIFO queue with set capacity
-// unsynchronized base.
+// unsynchronized base. Two versions of the same [Queue] interface:
+// one actually a circular buffer [CircularBuffer], the other using a channel
+// [CircularBufferChan], created using [cb.New] or [cb.NewC] respectively.
 package cb
 
 import "sync"
@@ -17,6 +19,7 @@ type Queue[T any] interface {
 	PopBlocking() (value T)
 }
 
+// FIFO [Queue] with fixed capacity. Fixed array implementation.
 type CircularBuffer[T any] struct {
 	buffer []T
 	head   int
@@ -27,7 +30,8 @@ type CircularBuffer[T any] struct {
 	empty  *sync.Cond
 }
 
-func New[T any](capacity int) Queue[T] {
+// NewC returns the fixed array version of 0 alloc fixed capacity (optionally blocking) [Queue].
+func New[T any](capacity int) *CircularBuffer[T] {
 	cb := &CircularBuffer[T]{
 		buffer: make([]T, capacity),
 		head:   0,
