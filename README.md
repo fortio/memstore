@@ -12,7 +12,7 @@ Distributed HA in memory store for Golang
 go run . -config-port 7999
 ```
 
-Then go change the `peers` on https://localhost:7999 to see:
+Then go change the `peers` on http://localhost:7999/?type=dynamic to see:
 ```
 20:26:10 I mstore.go:17> Peer set changed from  to a,b,c,z
 20:26:10 I mstore.go:23> Connecting to added Peer        : "a"
