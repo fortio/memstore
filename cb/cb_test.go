@@ -147,6 +147,7 @@ func TestProducerConsumerScenario(t *testing.T) {
 		})
 	}
 }
+
 func testProducerConsumerScenario(t *testing.T, buffer cb.Queue[int]) {
 	var wg sync.WaitGroup
 	wg.Add(11) // 10 producers + 1 consumer
@@ -198,6 +199,7 @@ func BenchmarkCircularBufferBlocking(b *testing.B) {
 		})
 	}
 }
+
 func benchmarkCircularBufferBlocking(b *testing.B, c cb.Queue[int]) {
 	var x int
 	for i := 0; i < b.N; i++ {
