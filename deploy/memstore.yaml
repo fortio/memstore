@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: StatefulSet
 metadata:
-  name: memstore-daemonset
+  name: memstore
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: memstore
@@ -12,7 +13,5 @@ spec:
         app: memstore
     spec:
       containers:
-      - name: memstore-container
-        image: fortio.org/memstore:latest
-        # Add your container configuration here
-  replicas: 3
+      - name: memstore
+        image: fortio/memstore:latest

@@ -9,4 +9,4 @@ VOLUME /etc/memstore
 VOLUME /var/lib/memstore
 WORKDIR /var/lib/memstore
 ENTRYPOINT ["/usr/bin/memstore"]
-CMD ["-config", "/etc/memstore"]
+CMD ["-config-dir", "/etc/memstore"]
