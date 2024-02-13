@@ -7,3 +7,5 @@ data:
   loglevel: debug
 #  peers: memstore-0,memstore-1,memstore-2
   dns: memstore.memstore.svc.cluster.local
+  dns-interval: 5s
+  statefulset: "true"

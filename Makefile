@@ -12,7 +12,7 @@ test:
 	go run . -peers a,b,c -config-port 7999
 
 local-k8s:
-	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" .
+	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" .
 	-kubectl delete statefulset -n memstore memstore # so it'll reload the image
 	docker buildx build --load --tag fortio/memstore:latest .
 	kubectl apply -f deploy

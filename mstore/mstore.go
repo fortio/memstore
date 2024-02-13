@@ -38,12 +38,17 @@ func peerChange(oldValue, newValue sets.Set[string]) {
 }
 
 func dnsChange(oldValue, newValue string) {
+	if oldValue == newValue {
+		log.LogVf("DNSWatch unchanged: %q", oldValue)
+		return
+	}
 	log.Infof("DNSWatch changed from %q to %q", oldValue, newValue)
 	StartDNSWatch(newValue)
 }
 
-func Start() {
-	log.Infof("memstore Start()")
+func Start(name string) {
+	log.Infof("memstore Start() name is %q", name)
+	myName = name
 	// peerChange does get call for even initial flag value
 }
 
