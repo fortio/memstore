@@ -13,5 +13,6 @@ spec:
         app: memstore
     spec:
       containers:
-      - name: memstore
-        image: fortio/memstore:latest
+      - name: memstore-container
+        image: fortio/memstore:latest # Dev mode, in prod use specific tag
+        imagePullPolicy: Always # Dev mode, in prod use IfNotPresent
