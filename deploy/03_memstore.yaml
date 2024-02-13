@@ -18,7 +18,7 @@ spec:
       containers:
       - name: memstore-container
         image: fortio/memstore:latest # Dev mode, in prod use specific tag
-        imagePullPolicy: Always # Dev mode, in prod use IfNotPresent
+        imagePullPolicy: Never # Dev mode with docker desktop local build from makefile, in prod use IfNotPresent
         volumeMounts:
           - name: config-volume
             mountPath: /etc/memstore

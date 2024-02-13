@@ -10,3 +10,12 @@ test:
 		--data-urlencode value=c,b,e,f ; echo) &
 	@echo 'Expect to see: Success "peers" -> "c,b,e,f"'
 	go run . -peers a,b,c -config-port 7999
+
+local-k8s:
+	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" .
+	-kubectl delete statefulset -n memstore memstore # so it'll reload the image
+	docker buildx build --load --tag fortio/memstore:latest .
+	kubectl apply -f deploy
+
+debug-pod:
+	kubectl run debug --image=ubuntu --restart=Never -- /bin/sleep infinity
