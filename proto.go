@@ -19,4 +19,5 @@ func main() {
 	log.Infof("Starting memstore prototype...")
 	mstore.Start()
 	scli.UntilInterrupted()
+	mstore.Stop()
 }

@@ -46,3 +46,8 @@ func Start() {
 	log.Infof("memstore Start()")
 	// peerChange does get call for even initial flag value
 }
+
+func Stop() {
+	StopDNSWatch()
+	log.Infof("memstore stopped")
+}
