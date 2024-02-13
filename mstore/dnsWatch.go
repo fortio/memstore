@@ -29,6 +29,9 @@ var (
 func reverseDNS(ips sets.Set[string]) (sets.Set[string], bool) {
 	allNames := sets.Set[string]{}
 	hasError := false
+	// From observation (hopefully true across kubernetes/coredns implementaions): any error
+	// means "in progress" so we wait until there are no errors (might be an issue though
+	// once we add readiness probe).
 	for ip := range ips {
 		names, err := net.LookupAddr(ip)
 		if err != nil {
