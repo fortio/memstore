@@ -2,7 +2,10 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: memstore
+  namespace: memstore
 spec:
+  # Allows memstore-0.memstore.memstore.svc.cluster.local to resolve to the first pod
+  serviceName: "memstore" # for pod to be in dns/matching the service name
   replicas: 3
   selector:
     matchLabels:
@@ -16,3 +19,10 @@ spec:
       - name: memstore-container
         image: fortio/memstore:latest # Dev mode, in prod use specific tag
         imagePullPolicy: Always # Dev mode, in prod use IfNotPresent
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/memstore
+      volumes:
+        - name: config-volume
+          configMap:
+            name: memstore-config

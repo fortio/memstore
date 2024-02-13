@@ -1,0 +1,14 @@
+# This way DNS for memstore.memstore is all the IPs of each pod.
+# http://localhost:31555/fortio/rest/dns?name=memstore.memstore
+apiVersion: v1
+kind: Service
+metadata:
+  name: memstore
+  namespace: memstore
+spec:
+  ports:
+  - port: 8080
+    name: http2
+  clusterIP: None # Headless
+  selector:
+    app: memstore
