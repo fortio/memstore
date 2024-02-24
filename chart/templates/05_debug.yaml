@@ -1,3 +1,4 @@
+{{- if .Values.debug }}
 # Fortio client deployment to check in cluster names and access and performance
 # Namespace:
 apiVersion: v1
@@ -84,3 +85,4 @@ metadata:
     flagger.app/config-tracking: disabled
 data:
   loglevel: verbose
+{{- end }}

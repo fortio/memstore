@@ -6,7 +6,7 @@ metadata:
 spec:
   # Allows memstore-0.memstore.memstore.svc.cluster.local to resolve to the first pod
   serviceName: "memstore" # for pod to be in dns/matching the service name
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: memstore
@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - name: memstore-container
-        image: fortio/memstore:latest # Dev mode, in prod use specific tag
-        imagePullPolicy: Never # Dev mode with docker desktop local build from makefile, in prod use IfNotPresent
+        image: {{.Values.image.repository}}:{{.Values.image.tag}}
+        imagePullPolicy: {{.Values.image.pullPolicy}}
         env:
           - name: NAME
             valueFrom:

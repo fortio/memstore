@@ -11,11 +11,12 @@ test:
 	@echo 'Expect to see: Success "peers" -> "c,b,e,f"'
 	go run . -peers a,b,c -config-port 7999
 
+# Works with docker-desktop for instance:
 local-k8s:
 	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" .
 	-kubectl delete statefulset -n memstore memstore # so it'll reload the image
 	docker buildx build --load --tag fortio/memstore:latest .
-	kubectl apply -f deploy
+	helm upgrade --install memstore chart/ --set image.pullPolicy=Never --set debug=true
 
 debug-pod:
 	kubectl run debug --image=ubuntu --restart=Never -- /bin/sleep infinity

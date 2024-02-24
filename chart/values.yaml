@@ -1,0 +1,9 @@
+namespace: memstore
+replicaCount: 3
+
+image:
+  repository: fortio/memstore
+  tag: latest # Use specific tag for prod
+  pullPolicy: IfNotPresent # We use never in local docker desktop mode (see Makefile)
+
+debug: false # Don't install fortio client
