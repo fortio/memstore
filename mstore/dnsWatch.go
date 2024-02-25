@@ -53,7 +53,7 @@ func reverseDNS(ips sets.Set[string]) (sets.Set[string], bool) {
 		allNames.Add(shortName)
 	}
 	if !allNames.Has(myName) {
-		log.Errf("My name %q not found in the reverse DNS list: %v", myName, allNames)
+		log.Warnf("My name %q not found in the reverse DNS list: %v", myName, allNames)
 	}
 	return allNames, hasError
 }
@@ -76,7 +76,7 @@ func checkDNS(serviceName string) {
 		var hasErrors bool
 		peerNames, hasErrors = reverseDNS(newIPs)
 		numPeers = len(peerNames)
-		log.Infof("StatefulSet mode, errs %v found %d peers (including ourselves %q) for %q: %v",
+		log.Infof("StatefulSet mode, errs %v found %d peers (possibly including ourselves %q) for %q: %v",
 			hasErrors, numPeers, myName, serviceName, peerNames)
 		if hasErrors {
 			return

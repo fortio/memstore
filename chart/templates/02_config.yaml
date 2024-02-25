@@ -9,3 +9,5 @@ data:
   dns: memstore-internal.memstore.svc.cluster.local
   dns-interval: 5s
   statefulset: "true"
+  ready: "false"
+  config-port: "7999"

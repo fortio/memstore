@@ -34,4 +34,4 @@ tail-log:
 	kubectl logs -f -n memstore memstore-0 | logc
 
 debug-pod:
-	kubectl run debug --image=ubuntu --restart=Never -- /bin/sleep infinity
+	kubectl run debug --image=ubuntu -- /bin/sleep infinity

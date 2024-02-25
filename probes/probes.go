@@ -5,35 +5,39 @@ import (
 	"net/http"
 	"sync"
 
+	"fortio.org/dflag"
 	"fortio.org/log"
 )
 
 type state struct {
 	started bool
 	live    bool
-	ready   bool
 	// mutex
 	mutex sync.Mutex
 }
 
-var State = state{}
+var (
+	State     = state{}
+	ReadyFlag = dflag.NewBool(false, "Initial readiness state")
+)
 
 func (s *state) SetLive(live bool) {
 	s.mutex.Lock()
 	s.live = live
 	s.mutex.Unlock()
+	log.Infof("Setting live to %v", live)
 }
 
 func (s *state) SetReady(ready bool) {
-	s.mutex.Lock()
-	s.ready = ready
-	s.mutex.Unlock()
+	_ = ReadyFlag.SetV(ready)
+	log.Infof("Setting ready to %v", ready)
 }
 
 func (s *state) SetStarted(started bool) {
 	s.mutex.Lock()
 	s.started = started
 	s.mutex.Unlock()
+	log.Infof("Setting started to %v", started)
 }
 
 func (s *state) IsLive() bool {
@@ -43,9 +47,7 @@ func (s *state) IsLive() bool {
 }
 
 func (s *state) IsReady() bool {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-	return s.ready
+	return ReadyFlag.Get()
 }
 
 func (s *state) IsStarted() bool {

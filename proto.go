@@ -22,6 +22,7 @@ func main() {
 	dflag.Flag("dns", mstore.DNSWatch)
 	dflag.Flag("dns-interval", mstore.DNSWatchSleepTime)
 	dflag.FlagBool("statefulset", mstore.StatefulSet)
+	dflag.FlagBool("ready", probes.ReadyFlag)
 	scli.ServerMain()
 	if mstore.StatefulSet.Get() && mstore.DNSWatch.Get() == "" {
 		log.Fatalf("StatefulSet mode needs -dns to be set")
@@ -43,7 +44,7 @@ func main() {
 	probes.Setup(mux)
 	probes.State.SetLive(true)
 	probes.State.SetStarted(true)
-	probes.State.SetReady(true)
+	// For testing/changing we can use curl to set flags podip:7999/set?name=ready&value=true
 	/*
 		time.Sleep(50 * time.Second) // give time for the probes to be ready
 		log.Warnf("Switching back to not ready")
