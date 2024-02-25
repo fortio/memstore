@@ -20,6 +20,8 @@ spec:
         image: {{.Values.image.repository}}:{{.Values.image.tag}}
         imagePullPolicy: {{.Values.image.pullPolicy}}
         env:
+          - name: EPOCH
+            value: {{ .Values.epoch | quote }} # To cause update even if tag is the same
           - name: NAME
             valueFrom:
               fieldRef:

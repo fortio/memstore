@@ -6,4 +6,6 @@ image:
   tag: latest # Use specific tag for prod
   pullPolicy: IfNotPresent # We use never in local docker desktop mode (see Makefile)
 
+epoch: 1
+
 debug: false # Don't install fortio client

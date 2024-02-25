@@ -7,7 +7,6 @@ package main
 import (
 	"flag"
 	"os"
-	"time"
 
 	"fortio.org/dflag"
 	"fortio.org/fortio/fhttp"
@@ -34,6 +33,8 @@ func main() {
 	if mstore.StatefulSet.Get() && !found {
 		log.Fatalf("No NAME env var found for statefulset mode (to this pod's name)")
 	}
+	epoch := os.Getenv("EPOCH")
+	log.Infof("Starting memstore with name %q and epoch %s", myName, epoch)
 	mstore.Start(myName)
 	mux, addr := fhttp.HTTPServer("memstore", *port)
 	if addr == nil {
@@ -43,9 +44,11 @@ func main() {
 	probes.State.SetLive(true)
 	probes.State.SetStarted(true)
 	probes.State.SetReady(true)
-	time.Sleep(50 * time.Second) // give time for the probes to be ready
-	log.Warnf("Switching back to not ready")
-	probes.State.SetReady(false)
+	/*
+		time.Sleep(50 * time.Second) // give time for the probes to be ready
+		log.Warnf("Switching back to not ready")
+		probes.State.SetReady(false)
+	*/
 	scli.UntilInterrupted()
 	mstore.Stop()
 }
