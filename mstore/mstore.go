@@ -47,7 +47,7 @@ func dnsChange(oldValue, newValue string) {
 }
 
 func Start(name string) {
-	log.Infof("memstore Start() name is %q", name)
+	log.Infof("memstore starting with name %q", name)
 	myName = name
 	// peerChange does get call for even initial flag value
 }

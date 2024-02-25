@@ -1,7 +1,7 @@
 apiVersion: v2
 name: memstore
 version: 0.1.0
-description: A Helm chart for deploying the memstore application
+description: A Helm chart for deploying the memstore service
 keywords:
   - memstore
   - helm

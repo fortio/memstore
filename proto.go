@@ -5,15 +5,20 @@
 package main
 
 import (
+	"flag"
 	"os"
+	"time"
 
 	"fortio.org/dflag"
+	"fortio.org/fortio/fhttp"
 	"fortio.org/log"
 	"fortio.org/memstore/mstore"
+	"fortio.org/memstore/probes"
 	"fortio.org/scli"
 )
 
 func main() {
+	port := flag.String("port", "8080", "Port to listen on")
 	dflag.Flag("peers", mstore.Peers)
 	dflag.Flag("dns", mstore.DNSWatch)
 	dflag.Flag("dns-interval", mstore.DNSWatchSleepTime)
@@ -30,6 +35,17 @@ func main() {
 		log.Fatalf("No NAME env var found for statefulset mode (to this pod's name)")
 	}
 	mstore.Start(myName)
+	mux, addr := fhttp.HTTPServer("memstore", *port)
+	if addr == nil {
+		log.Fatalf("Failed to start http server")
+	}
+	probes.Setup(mux)
+	probes.State.SetLive(true)
+	probes.State.SetStarted(true)
+	probes.State.SetReady(true)
+	time.Sleep(50 * time.Second) // give time for the probes to be ready
+	log.Warnf("Switching back to not ready")
+	probes.State.SetReady(false)
 	scli.UntilInterrupted()
 	mstore.Stop()
 }
