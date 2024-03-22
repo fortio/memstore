@@ -1,3 +1,5 @@
+.golangci.yml
+.goreleaser.yaml
 .DS_Store
 # Binaries for programs and plugins
 *.exe
