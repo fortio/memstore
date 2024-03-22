@@ -41,6 +41,24 @@ Should we
 
 Let's use a fully mesh broadcast using point2point h2.
 
+## Components
+
+### Discovery Service
+
+Need to get list of (possible) peers
+
+Pluggable module
+
+#### Kubernetes
+
+Endpoint(s) - or rather to make it simpler and allow by name addressing - StatefulSet (would also work better with istio than trying direct pod to pod by IP)
+
+#### DNS
+
+
+
+###
+
 ## Embedded or separate
 
 Why not both

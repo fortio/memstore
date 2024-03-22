@@ -6,10 +6,15 @@ import (
 	"fortio.org/sets"
 )
 
-var Peers = dflag.New(
-	sets.Set[string]{},
-	"Peers to connect to (comma separated set)",
-).WithNotifier(peerChange)
+var (
+	// Either direct peer lists (yet dynamic).
+	Peers = dflag.New(
+		sets.Set[string]{},
+		"Peers to connect to (comma separated set)",
+	).WithNotifier(peerChange)
+	// or DNS based discovery/watch.
+	DNSWatch = dflag.New("", "DNS service name to watch for peers").WithNotifier(dnsChange)
+)
 
 func connect(p string) {
 	log.Infof("Connecting to peer     : %q", p)
@@ -21,6 +26,8 @@ func disconnect(p string) {
 
 func peerChange(oldValue, newValue sets.Set[string]) {
 	log.Infof("Peer set changed from %v to %v", oldValue, newValue)
+	// Make copy of newValue so we don't mutate the flag's value
+	newValue = newValue.Clone()
 	sets.RemoveCommon(oldValue, newValue)
 	for _, p := range sets.Sort(newValue) {
 		connect(p)
@@ -30,7 +37,22 @@ func peerChange(oldValue, newValue sets.Set[string]) {
 	}
 }
 
-func Start() {
-	log.Infof("memstore Start()")
+func dnsChange(oldValue, newValue string) {
+	if oldValue == newValue {
+		log.LogVf("DNSWatch unchanged: %q", oldValue)
+		return
+	}
+	log.Infof("DNSWatch changed from %q to %q", oldValue, newValue)
+	StartDNSWatch(newValue)
+}
+
+func Start(name string) {
+	log.Infof("memstore starting with name %q", name)
+	myName = name
 	// peerChange does get call for even initial flag value
+}
+
+func Stop() {
+	StopDNSWatch()
+	log.Infof("memstore stopped")
 }

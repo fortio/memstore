@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: memstore
+  namespace: memstore
+spec:
+  # Allows memstore-0.memstore.memstore.svc.cluster.local to resolve to the first pod
+  serviceName: "memstore" # for pod to be in dns/matching the service name
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: memstore
+  template:
+    metadata:
+      labels:
+        app: memstore
+    spec:
+      containers:
+      - name: memstore-container
+        image: {{.Values.image.repository}}:{{.Values.image.tag}}
+        imagePullPolicy: {{.Values.image.pullPolicy}}
+        env:
+          - name: EPOCH
+            value: {{ .Values.epoch | quote }} # To cause update even if tag is the same
+          - name: NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/memstore
+        startupProbe:
+          httpGet:
+            path: /startup
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      volumes:
+        - name: config-volume
+          configMap:
+            name: memstore-config

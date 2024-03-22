@@ -1,0 +1,88 @@
+{{- if .Values.debug }}
+# Fortio client deployment to check in cluster names and access and performance
+# Namespace:
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fortio
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fortio-client
+  namespace: fortio
+spec:
+  type: NodePort # to be reachable in dev from host machine (kubernetes in docker desktop)
+  ports:
+  - port: 8078
+    name: tcp-echo
+  - port: 8079
+    name: grpc-ping
+  - port: 8080
+    name: http2-fortio
+  - port: 8081
+    name: http-redir
+  selector:
+    app: fortio-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortio-client-deployment
+  namespace: fortio
+spec:
+  replicas: 1 # tells deployment to run 1 pod(s) matching the template
+  selector:
+    matchLabels:
+      app: fortio-client
+  template: # create pods using pod definition in this template
+    metadata:
+      annotations:
+        prometheus.io/path: /fortio/debug/metrics
+        prometheus.io/port: "8080"
+      # a unique name is generated from the deployment name
+      labels:
+        app: fortio-client
+    spec:
+      containers:
+      - name: fortio-client
+        image: fortio/fortio:latest
+        imagePullPolicy: Always # IfNotPresent when using explicit version tag (not "latest") [but we do use latest/latest_release in some cases]
+        ports:
+        - containerPort: 8078 # tcp echo
+        - containerPort: 8079 # grpc echo
+        - containerPort: 8080 # main serving port
+        - containerPort: 8081 # redirection to https port
+        args:
+          - server
+          - -config-dir
+          - /etc/fortio/
+          - -echo-debug-path
+          - /fortio/debug/
+#          - -sync
+#          - https://storage.googleapis.com:443/fortio-data?prefix=fortio.istio.io/
+#          - -sync-interval
+#          - 15m # sync every 15 minutes
+        volumeMounts:
+          - mountPath: /var/lib/fortio
+            name: fortio-data
+          - mountPath: /etc/fortio
+            name: fortio-config
+      volumes:
+        - name: fortio-data
+          emptyDir:
+            medium: Memory
+        - name: fortio-config
+          configMap:
+            name: fortio-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fortio-config
+  namespace: fortio
+  annotations:
+    flagger.app/config-tracking: disabled
+data:
+  loglevel: verbose
+{{- end }}

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: memstore
+version: 0.1.0
+description: A Helm chart for deploying the memstore service
+keywords:
+  - memstore
+  - helm
+maintainers:
+  - name: Laurent Demailly
+    email: ldemailly@gmail.com
+appVersion: 0.1.0
