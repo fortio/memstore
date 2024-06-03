@@ -24,6 +24,7 @@ local-k8s:
 	# -kubectl delete statefulset -n memstore memstore # so it'll reload the image
 	docker buildx build --load --tag fortio/memstore:latest .
 	$(HELM) $(HELM_INSTALL_ARGS)
+	@echo "make ready to mark pods ready through config map, make tail-log to see logs"
 
 # Needs helm plugin install https://github.com/databus23/helm-diff
 local-diff:
@@ -32,6 +33,10 @@ local-diff:
 # Logs of first pod, colorized with logc (go install fortio.org/logc@latest)
 tail-log:
 	kubectl logs -f -n memstore memstore-0 | logc
+
+# Trigger ready
+ready:
+	kubectl patch configmap -n memstore memstore-config --type=json -p='[{"op": "replace", "path": "/data/ready", "value": "true"}]'
 
 debug-pod:
 	kubectl run debug --image=ubuntu -- /bin/sleep infinity
@@ -42,5 +47,4 @@ lint: .golangci.yml
 .golangci.yml: Makefile
 	curl -fsS -o .golangci.yml https://raw.githubusercontent.com/fortio/workflows/main/golangci.yml
 
-.PHONY: lint
-
+.PHONY: lint ready tail-log local-diff local-k8s test
