@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	fortio.org/dflag v1.7.1
-	fortio.org/fortio v1.63.8
+	fortio.org/fortio v1.63.9
 	fortio.org/log v1.12.2
 	fortio.org/scli v1.14.2
 	fortio.org/sets v1.0.4
