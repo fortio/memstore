@@ -21,7 +21,6 @@ HELM_INSTALL_ARGS:=upgrade --install $(CHART_NAME) $(CHART_DIR) $(LOCAL_HELM_OVE
 
 local-k8s:
 	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" .
-	# -kubectl delete statefulset -n memstore memstore # so it'll reload the image
 	docker buildx build --load --tag fortio/memstore:latest .
 	$(HELM) $(HELM_INSTALL_ARGS)
 	@echo "make ready to mark pods ready through config map, make tail-log to see logs"
