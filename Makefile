@@ -29,6 +29,10 @@ local-k8s:
 local-diff:
 	$(HELM) diff $(HELM_INSTALL_ARGS)
 
+# To see patched config map changes outside of helm:
+local-kubectl-diff:
+	$(HELM) template $(CHART_NAME) $(CHART_DIR) $(LOCAL_HELM_OVERRIDES) | KUBECTL_EXTERNAL_DIFF="colordiff -u" kubectl diff -f -
+
 # Logs of first pod, colorized with logc (go install fortio.org/logc@latest)
 tail-log:
 	kubectl logs -f -n memstore memstore-0 | logc
