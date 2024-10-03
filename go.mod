@@ -3,15 +3,15 @@ module fortio.org/memstore
 go 1.21
 
 require (
-	fortio.org/dflag v1.7.2
+	fortio.org/dflag v1.7.3
 	fortio.org/fortio v1.67.0
-	fortio.org/log v1.16.0
-	fortio.org/scli v1.15.2
+	fortio.org/log v1.17.1
+	fortio.org/scli v1.15.3
 	fortio.org/sets v1.2.0
 )
 
 require (
-	fortio.org/cli v1.9.0 // indirect
+	fortio.org/cli v1.9.2 // indirect
 	fortio.org/safecast v1.0.0 // indirect
 	fortio.org/struct2env v0.4.1 // indirect
 	fortio.org/version v1.0.4 // indirect
