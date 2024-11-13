@@ -58,7 +58,7 @@ func testBoundaryConditions(t *testing.T, buffer cb.Queue[int]) {
 	}
 
 	// Test filling the buffer
-	for i := 0; i < capacity; i++ {
+	for i := range capacity {
 		if !buffer.Push(i) {
 			t.Errorf("Failed to push item %d to the buffer", i)
 		}
@@ -73,7 +73,7 @@ func testBoundaryConditions(t *testing.T, buffer cb.Queue[int]) {
 	}
 
 	// Test popping items from the full buffer
-	for i := 0; i < capacity; i++ {
+	for i := range capacity {
 		item, ok := buffer.Pop()
 		if !ok || item != i {
 			t.Errorf("Popped item should be %d, got %d", i, item)
@@ -86,14 +86,14 @@ func testBoundaryConditions(t *testing.T, buffer cb.Queue[int]) {
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 100; i++ {
+		for i := range 100 {
 			buffer.PushBlocking(i)
 		}
 	}()
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 100; i++ {
+		for i := range 100 {
 			item := buffer.PopBlocking()
 			if item != i {
 				t.Errorf("Popped item should be %d, got %d", i, item)
@@ -154,7 +154,7 @@ func testProducerConsumerScenario(t *testing.T, buffer cb.Queue[int]) {
 
 	producer := func(id int) {
 		defer wg.Done()
-		for i := 0; i < 2; i++ {
+		for i := range 2 {
 			buffer.PushBlocking(id*10 + i)
 		}
 	}
@@ -170,7 +170,7 @@ func testProducerConsumerScenario(t *testing.T, buffer cb.Queue[int]) {
 	}
 
 	// Start 10 producer goroutines
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		go producer(i)
 	}
 
@@ -219,14 +219,14 @@ func benchmarkPushBlocking(b *testing.B, buffer cb.Queue[int], numProducers, num
 	consN := b.N * numProducers
 	producer := func() {
 		defer wg.Done()
-		for i := 0; i < prodN; i++ {
+		for i := range prodN {
 			buffer.PushBlocking(i)
 		}
 	}
 
 	consumer := func() {
 		defer wg.Done()
-		for i := 0; i < consN; i++ {
+		for range consN {
 			buffer.PopBlocking()
 		}
 	}
@@ -234,12 +234,12 @@ func benchmarkPushBlocking(b *testing.B, buffer cb.Queue[int], numProducers, num
 	b.ResetTimer()
 
 	// Start producer goroutines
-	for i := 0; i < numProducers; i++ {
+	for range numProducers {
 		go producer()
 	}
 
 	// Start consumer goroutines
-	for i := 0; i < numConsumers; i++ {
+	for range numConsumers {
 		go consumer()
 	}
 
