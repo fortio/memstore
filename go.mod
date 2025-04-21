@@ -7,7 +7,7 @@ require (
 	fortio.org/fortio v1.68.0
 	fortio.org/log v1.17.1
 	fortio.org/scli v1.15.3
-	fortio.org/sets v1.2.0
+	fortio.org/sets v1.3.0
 )
 
 require (
