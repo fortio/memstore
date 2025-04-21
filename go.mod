@@ -1,7 +1,6 @@
 module fortio.org/memstore
 
-go 1.23.3
-toolchain go1.24.1
+go 1.23.8
 
 require (
 	fortio.org/dflag v1.8.1
