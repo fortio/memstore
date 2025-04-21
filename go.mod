@@ -5,7 +5,7 @@ go 1.23.3
 require (
 	fortio.org/dflag v1.7.3
 	fortio.org/fortio v1.68.0
-	fortio.org/log v1.17.1
+	fortio.org/log v1.17.2
 	fortio.org/scli v1.15.3
 	fortio.org/sets v1.2.0
 )
@@ -13,7 +13,7 @@ require (
 require (
 	fortio.org/cli v1.9.2 // indirect
 	fortio.org/safecast v1.0.0 // indirect
-	fortio.org/struct2env v0.4.1 // indirect
+	fortio.org/struct2env v0.4.2 // indirect
 	fortio.org/version v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
