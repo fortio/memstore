@@ -26,14 +26,15 @@ var (
 	wg       sync.WaitGroup
 )
 
-func reverseDNS(ips sets.Set[string]) (sets.Set[string], bool) {
+func reverseDNS(ctx context.Context, ips sets.Set[string]) (sets.Set[string], bool) {
 	allNames := sets.Set[string]{}
 	hasError := false
 	// From observation (hopefully true across kubernetes/coredns implementaions): any error
 	// means "in progress" so we wait until there are no errors (might be an issue though
 	// once we add readiness probe).
 	for ip := range ips {
-		names, err := net.LookupAddr(ip)
+		resolver := net.Resolver{}
+		names, err := resolver.LookupAddr(ctx, ip)
 		if err != nil {
 			log.Errf("Error resolving IP %q: %v", ip, err)
 			hasError = true
@@ -59,8 +60,9 @@ func reverseDNS(ips sets.Set[string]) (sets.Set[string], bool) {
 }
 
 // Resolve the service name to a list of IPs.
-func checkDNS(serviceName string) {
-	ips, err := net.LookupHost(serviceName)
+func checkDNS(ctx context.Context, serviceName string) {
+	resolver := net.Resolver{}
+	ips, err := resolver.LookupHost(ctx, serviceName)
 	if err != nil {
 		log.Errf("Error resolving service %q: %v", serviceName, err)
 		return
@@ -74,7 +76,7 @@ func checkDNS(serviceName string) {
 	}
 	if StatefulSet.Get() {
 		var hasErrors bool
-		peerNames, hasErrors = reverseDNS(newIPs)
+		peerNames, hasErrors = reverseDNS(ctx, newIPs)
 		numPeers = len(peerNames)
 		log.Infof("StatefulSet mode, errs %v found %d peers (possibly including ourselves %q) for %q: %v",
 			hasErrors, numPeers, myName, serviceName, peerNames)
@@ -89,14 +91,14 @@ func checkDNS(serviceName string) {
 
 func dnsWatcher(ctx context.Context, serviceName string) {
 	defer wg.Done()
-	checkDNS(serviceName) // first time, without waiting or cancel check
+	checkDNS(ctx, serviceName) // first time, without waiting or cancel check
 	for {
 		select {
 		case <-ctx.Done():
 			log.Warnf("DNS Watcher for %q exiting", serviceName)
 			return
 		case <-time.After(DNSWatchSleepTime.Get()):
-			checkDNS(serviceName)
+			checkDNS(ctx, serviceName)
 		}
 	}
 }
