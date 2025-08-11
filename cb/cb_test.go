@@ -123,7 +123,7 @@ func BenchmarkCircularBuffer(b *testing.B) {
 func benchmarkCircularBuffer(b *testing.B, c cb.Queue[int]) {
 	var x int
 	var ok bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		c.Push(i)
 		x, ok = c.Pop()
 		if !ok {
@@ -202,7 +202,7 @@ func BenchmarkCircularBufferBlocking(b *testing.B) {
 
 func benchmarkCircularBufferBlocking(b *testing.B, c cb.Queue[int]) {
 	var x int
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		c.PushBlocking(i)
 		x = c.PopBlocking()
 		if x != i {
