@@ -3,7 +3,7 @@ module fortio.org/memstore
 go 1.23.8
 
 require (
-	fortio.org/dflag v1.8.1
+	fortio.org/dflag v1.9.2
 	fortio.org/fortio v1.71.2
 	fortio.org/log v1.17.2
 	fortio.org/scli v1.16.1
@@ -12,6 +12,7 @@ require (
 
 require (
 	fortio.org/cli v1.10.0 // indirect
+	fortio.org/duration v1.0.4 // indirect
 	fortio.org/safecast v1.2.0 // indirect
 	fortio.org/struct2env v0.4.2 // indirect
 	fortio.org/version v1.0.4 // indirect
