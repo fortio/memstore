@@ -3,9 +3,9 @@ module fortio.org/memstore
 go 1.24.0
 
 require (
-	fortio.org/dflag v1.9.2
+	fortio.org/dflag v1.9.3
 	fortio.org/fortio v1.73.0
-	fortio.org/log v1.18.1
+	fortio.org/log v1.18.3
 	fortio.org/scli v1.18.1
 	fortio.org/sets v1.3.0
 )
