@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	fortio.org/dflag v1.9.3
-	fortio.org/fortio v1.73.1
+	fortio.org/fortio v1.73.2
 	fortio.org/log v1.18.3
 	fortio.org/scli v1.19.0
 	fortio.org/sets v1.3.0
@@ -20,9 +20,9 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/kortschak/goroutine v1.1.3 // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
-	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 )
 
 // replace fortio.org/scli => ../scli
