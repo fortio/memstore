@@ -1,4 +1,4 @@
-// First In First Out (FIFO) [Queue] with fixed capacity.
+// Package cb provides First In First Out (FIFO) [Queue] with fixed capacity.
 // Circular Buffer implementation in Go with both
 // pub/sub thread safe blocking API and pure FIFO queue with set capacity
 // unsynchronized base. Two versions of the same [Queue] interface:
@@ -19,7 +19,7 @@ type Queue[T any] interface {
 	PopBlocking() (value T)
 }
 
-// FIFO [Queue] with fixed capacity. Fixed array implementation.
+// CircularBuffer is a FIFO [Queue] with fixed capacity. Fixed array implementation.
 type CircularBuffer[T any] struct {
 	buffer []T
 	head   int
@@ -92,7 +92,7 @@ func (cb *CircularBuffer[T]) Pop() (T, bool) {
 
 // Thread safe blocking versions:
 
-// Push adds an item to the queue. blocks if queue is full.
+// PushBlocking adds an item to the queue. blocks if queue is full.
 func (cb *CircularBuffer[T]) PushBlocking(item T) {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
@@ -109,7 +109,7 @@ func (cb *CircularBuffer[T]) PushBlocking(item T) {
 	cb.empty.Signal()
 }
 
-// Pop removes an item from the queue. blocks if queue is empty.
+// PopBlocking removes an item from the queue. blocks if queue is empty.
 func (cb *CircularBuffer[T]) PopBlocking() T {
 	cb.mu.Lock()
 	defer cb.mu.Unlock()
