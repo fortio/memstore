@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	// Either direct peer lists (yet dynamic).
+	// Peers flag for direct peer lists (yet dynamic).
 	Peers = dflag.New(
 		sets.Set[string]{},
 		"Peers to connect to (comma separated set)",
 	).WithNotifier(peerChange)
-	// or DNS based discovery/watch.
+	// DNSWatch flag for DNS based discovery/watch.
 	DNSWatch = dflag.New("", "DNS service name to watch for peers").WithNotifier(dnsChange)
 )
 
