@@ -1,6 +1,6 @@
 package cb
 
-// FIFO [Queue] with fixed capacity.
+// CircularBufferChan is the channel version of a FIFO [Queue] with fixed capacity.
 // Channel / go idiomatic version (blocking, multi thread safe),
 // use [CircularBufferChan] for low/no contention cases as it is faster.
 type CircularBufferChan[T any] struct {
@@ -59,12 +59,12 @@ func (cb *CircularBufferChan[T]) Pop() (value T, ok bool) {
 
 // Thread safe blocking versions:
 
-// Push adds an item to the queue. blocks if queue is full.
+// PushBlocking adds an item to the queue. blocks if queue is full.
 func (cb *CircularBufferChan[T]) PushBlocking(item T) {
 	cb.buffer <- item
 }
 
-// Pop removes an item from the queue. blocks if queue is empty.
+// PopBlocking removes an item from the queue. blocks if queue is empty.
 func (cb *CircularBufferChan[T]) PopBlocking() T {
 	return <-cb.buffer
 }

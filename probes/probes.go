@@ -1,4 +1,4 @@
-// Implement kubernetes probes.
+// Package probes implements Kubernetes probes.
 package probes
 
 import (
