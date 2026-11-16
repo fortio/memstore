@@ -6,7 +6,7 @@ require (
 	fortio.org/dflag v1.9.3
 	fortio.org/fortio v1.76.0
 	fortio.org/log v1.18.3
-	fortio.org/scli v1.19.0
+	fortio.org/scli v1.20.0
 	fortio.org/sets v1.3.0
 )
 
@@ -20,7 +20,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/kortschak/goroutine v1.1.3 // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250406160420-959f8f3db0fb // indirect
-	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
 )
 
 // replace fortio.org/scli => ../scli
